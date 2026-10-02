@@ -81,6 +81,18 @@ StartCoroutine(PollinationsAuth.Login(
 | `GetModels(category, onSuccess, onError)` | raw JSON `string`, `category` is `"text"`, `"image"`, or `"audio"` |
 | `PollinationsAuth.Login(clientId, onSuccess, onError, onCodeReady, timeoutSeconds = 300)` | `string` access token |
 
+## What goes over the wire
+
+Every call is a plain HTTPS request to `https://gen.pollinations.ai` with `Authorization: Bearer <key>` (see [`Runtime/PollinationsClient.cs`](Runtime/PollinationsClient.cs)):
+
+| Method | Request |
+|---|---|
+| `GenerateText` | `POST /v1/chat/completions` with `{"model": "openai", "messages": [...]}` |
+| `GenerateImage` | `GET /image/{prompt}?model=flux&width=1024&height=1024` |
+| `GenerateSpeech` | `GET /audio/{text}?voice=nova` |
+| `GetModels` | `GET /text/models`, `/image/models`, `/audio/models` |
+| `PollinationsAuth.Login` | device flow against `https://enter.pollinations.ai` |
+
 ## Requirements
 
 Unity 2021.3 LTS or newer. No third-party dependencies — built entirely on `UnityEngine.Networking`.
